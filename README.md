@@ -7,3 +7,5 @@
 * Lasst uns dieses Repository ordentlich halten.
 	* Dafür dieser Link, der zeigt, wie man ausreichend gute Commitmessages schreibt:
 		* https://chris.beams.io/posts/git-commit/ 
+* Empfehlung einer IDE für Unity: https://www.jetbrains.com/de-de/rider/
+	* gibt es für Stundenten auch kostenlos.
