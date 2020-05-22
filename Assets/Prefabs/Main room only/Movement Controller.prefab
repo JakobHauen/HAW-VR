@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0af0d17d0c75b4940aa400cfa7f058cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resolution: 20
   _radius: 0.2
 --- !u!120 &7239129611787983027
 LineRenderer:
@@ -188,6 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _indicatorColor: {r: 0, g: 1, b: 1, a: 1}
+  _indicatorResolution: 20
   _playerController: {fileID: 0}
   _leftController: {fileID: 0}
   _fadeDuration: 0.33
@@ -204,7 +204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38b2eea0d368650439bc527568739f31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resolution: 20
 --- !u!120 &7239129613789280514
 LineRenderer:
   m_ObjectHideFlags: 0
