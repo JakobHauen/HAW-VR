@@ -5,12 +5,12 @@ public class MovementIndicator : MonoBehaviour
     protected LineRenderer LineRenderer { get; private set; }
     protected int Resolution { get; private set; }
     
-    private void Awake()
+    protected virtual void Awake()
     {
         LineRenderer = GetComponent<LineRenderer>();
     }
 
-    public void SetResolution(int resolution)
+    public virtual void SetResolution(int resolution)
     {
         Resolution = resolution;
         LineRenderer.positionCount = Resolution;
@@ -18,12 +18,17 @@ public class MovementIndicator : MonoBehaviour
     
     public void SetColor(Color c)
     {
-        GradientColorKey[] colors = LineRenderer.colorGradient.colorKeys;
-        for (int i = 0; i < colors.Length; i++)
+        Gradient colorGradient = LineRenderer.colorGradient;
+        GradientColorKey[] colorKeys = colorGradient.colorKeys;
+        GradientAlphaKey[] alphaKeys = colorGradient.alphaKeys;
+
+        for (int i = 0; i < colorKeys.Length; i++)
         {
-            colors[i].color = c;
+            colorKeys[i].color = c;
         }
-        LineRenderer.colorGradient.colorKeys = colors;
+        
+        colorGradient.SetKeys(colorKeys, alphaKeys);
+        LineRenderer.colorGradient = colorGradient;
     }
 
     public void EnableLineRenderer()

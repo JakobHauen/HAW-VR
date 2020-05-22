@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MovementTrajectory))]
@@ -33,6 +34,8 @@ public class MovementController : MonoBehaviour
 
     public bool IsMoving { get; private set; }
 
+    private UnityEngine.XR.InputDevice _device;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -44,7 +47,7 @@ public class MovementController : MonoBehaviour
         
         // Always keep this object alive
         DontDestroyOnLoad(gameObject);
-
+        
         IsMoving = false;
         _trajectory = GetComponent<MovementTrajectory>();
         _circle = GetComponentInChildren<MovementCircle>();
@@ -58,29 +61,38 @@ public class MovementController : MonoBehaviour
         _circleTransform = _circle.transform;
         _circle.SetColor(_indicatorColor);
         _circle.SetResolution(_indicatorResolution);
-
         _circle.enabled = false;
         
         _trajectory.SetColor(_indicatorColor);
         _trajectory.SetResolution(_indicatorResolution);
+        
+       FetchLeftController();
+    }
+
+    private void FetchLeftController()
+    {
+        List<UnityEngine.XR.InputDevice> leftHandedControllers = new List<UnityEngine.XR.InputDevice>();
+        UnityEngine.XR.InputDeviceCharacteristics desiredCharacteristics = UnityEngine.XR.InputDeviceCharacteristics.HeldInHand | UnityEngine.XR.InputDeviceCharacteristics.Left | UnityEngine.XR.InputDeviceCharacteristics.Controller;
+        UnityEngine.XR.InputDevices.GetDevicesWithCharacteristics(desiredCharacteristics, leftHandedControllers);
+        _device = leftHandedControllers[0];
     }
     
     // Remove when button manager exists
     private void Update()
     {
-        OVRInput.Update();
-        
-        if (OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).y > 0.8)
+        if (_device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out Vector2 stickAxis))
         {
-            PreviewMovement(_leftController.position, _leftController.rotation);
-        }
-        else
-        {
-            Move();
+            if (stickAxis.y > 0.8f)
+            {
+                OnThumbstickPushUp(_leftController);
+            }
+            else
+            {
+                OnThumbstickRelease();
+            }
         }
     }
     
-    // if (OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).y > 0.8)
     /// <summary>
     /// Shows the player the movement / teleport indicator.
     /// </summary>
