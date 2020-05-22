@@ -90,7 +90,7 @@ public class MovementController : MonoBehaviour
         PreviewMovement(leftController.position, leftController.rotation);
     }
 
-    public void OnThumbstickPushDown()
+    public void OnThumbstickRelease()
     {
         Move();
     }
@@ -144,7 +144,7 @@ public class MovementController : MonoBehaviour
         }
         _screenFade.SetFadeLevel(1);
 
-        _playerController.position = _lastTargetPosition; // + (Vector3.up * _playerHeight);
+        _playerController.position = _lastTargetPosition;
         _lastTargetPosition = Vector3.zero;
         
         t = 1;
