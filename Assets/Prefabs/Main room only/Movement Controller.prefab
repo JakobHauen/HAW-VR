@@ -189,7 +189,6 @@ MonoBehaviour:
   _indicatorColor: {r: 0, g: 1, b: 1, a: 1}
   _indicatorResolution: 20
   _playerController: {fileID: 0}
-  _leftController: {fileID: 0}
   _fadeDuration: 0.33
   _screenFade: {fileID: 0}
 --- !u!114 &7239129613789280515

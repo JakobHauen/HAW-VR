@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MovementTrajectory))]
@@ -22,9 +21,8 @@ public class MovementController : MonoBehaviour
     [SerializeField]
     private int _indicatorResolution = 20;
 
-    // Remove _leftController when button manager exists
     [SerializeField]
-    private Transform _playerController, _leftController;
+    private Transform _playerController;
 
     [SerializeField]
     private float _fadeDuration = 0.33f;
@@ -33,9 +31,7 @@ public class MovementController : MonoBehaviour
     private OVRScreenFade _screenFade;
 
     public bool IsMoving { get; private set; }
-
-    private UnityEngine.XR.InputDevice _device;
-
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -65,46 +61,20 @@ public class MovementController : MonoBehaviour
         
         _trajectory.SetColor(_indicatorColor);
         _trajectory.SetResolution(_indicatorResolution);
-        
-       FetchLeftController();
+
+        InputManager.Instance.OnLeftStickMove += OnLeftStickMove;
     }
 
-    private void FetchLeftController()
+    private void OnLeftStickMove(Vector2 stickAxis)
     {
-        List<UnityEngine.XR.InputDevice> leftHandedControllers = new List<UnityEngine.XR.InputDevice>();
-        UnityEngine.XR.InputDeviceCharacteristics desiredCharacteristics = UnityEngine.XR.InputDeviceCharacteristics.HeldInHand | UnityEngine.XR.InputDeviceCharacteristics.Left | UnityEngine.XR.InputDeviceCharacteristics.Controller;
-        UnityEngine.XR.InputDevices.GetDevicesWithCharacteristics(desiredCharacteristics, leftHandedControllers);
-        _device = leftHandedControllers[0];
-    }
-    
-    // Remove when button manager exists
-    private void Update()
-    {
-        if (_device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out Vector2 stickAxis))
+        if (stickAxis.y > 0.8f)
         {
-            if (stickAxis.y > 0.8f)
-            {
-                OnThumbstickPushUp(_leftController);
-            }
-            else
-            {
-                OnThumbstickRelease();
-            }
+            PreviewMovement(InputManager.Instance.GetLeftControllerPosition(), InputManager.Instance.GetLeftControllerRotation());
         }
-    }
-    
-    /// <summary>
-    /// Shows the player the movement / teleport indicator.
-    /// </summary>
-    /// <param name="leftController"></param>
-    public void OnThumbstickPushUp(Transform leftController)
-    {
-        PreviewMovement(leftController.position, leftController.rotation);
-    }
-
-    public void OnThumbstickRelease()
-    {
-        Move();
+        else
+        {
+            Move();
+        }
     }
     
     private void PreviewMovement(Vector3 raycastOrigin, Quaternion raycastRotation)
