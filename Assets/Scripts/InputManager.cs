@@ -11,8 +11,9 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance { get; private set; }
     
     private InputDevice _leftController, _rightController;
+    private bool _hasLeftController, _hasRightController;
 
-#region Input Values
+    #region Input Values
     
     private Vector2 _leftControllerStickAxis  = Vector2.zero,
                     _rightControllerStickAxis = Vector2.zero;
@@ -61,113 +62,56 @@ public class InputManager : MonoBehaviour
         
         // Always keep this object alive
         DontDestroyOnLoad(gameObject);
-
-        FetchLeftController();
-        FetchRightController();
-    }
-
-    private void FetchLeftController()
-    {
-        List<InputDevice> leftHandedControllers = new List<InputDevice>();
-        InputDeviceCharacteristics desiredCharacteristics = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left;
-        InputDevices.GetDevicesWithCharacteristics(desiredCharacteristics, leftHandedControllers);
-        if (leftHandedControllers.Count != 1)
-        {
-            Debug.LogError("None or multiple left handed controllers found!");
-            return;
-        }
-
-        _leftController = leftHandedControllers[0];
+        
+        InputDevices.deviceConnected += DeviceConnected;
+        InputDevices.deviceDisconnected += DeviceDisconnected;
     }
     
-    private void FetchRightController()
+    private void DeviceConnected(InputDevice device)
     {
-        List<InputDevice> rightHandedControllers = new List<InputDevice>();
-        InputDeviceCharacteristics desiredCharacteristics = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
-        InputDevices.GetDevicesWithCharacteristics(desiredCharacteristics, rightHandedControllers);
-        if (rightHandedControllers.Count != 1)
+        TryGetLeftController(device);
+        TryGetRightController(device);
+    }
+    
+    private void TryGetLeftController(InputDevice device)
+    {
+        if (_hasLeftController || _leftController == device)
         {
-            Debug.LogError("None or multiple right handed controllers found!");
             return;
         }
-
-        _rightController = rightHandedControllers[0];
+        
+        InputDeviceCharacteristics desiredCharacteristics = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left;
+        if ((device.characteristics & desiredCharacteristics) == desiredCharacteristics)
+        {
+            _leftController = device;
+            _hasLeftController = true;
+        }
+    }
+    
+    private void TryGetRightController(InputDevice device)
+    {
+        if (_hasRightController || _rightController == device)
+        {
+            return;
+        }
+        
+        InputDeviceCharacteristics desiredCharacteristics = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
+        if ((device.characteristics & desiredCharacteristics) == desiredCharacteristics)
+        {
+            _rightController = device;
+            _hasRightController = true;
+        }
     }
 
-    // Update is called once per frame
-    private void Update()
+    private void DeviceDisconnected(InputDevice device)
     {
-        Vector2 stickAxis;
-        bool buttonState;
-        
-        // LEFT STICK
-        if (_leftController.TryGetFeatureValue(CommonUsages.primary2DAxis, out stickAxis))
+        if (device == _leftController)
         {
-            if (_leftControllerStickAxis != stickAxis)
-            {
-                _leftControllerStickAxis = stickAxis;
-                LeftStickMove();
-            }
+            _hasLeftController = false;
         }
-        
-        // LEFT TRIGGER
-        if (_leftController.TryGetFeatureValue(CommonUsages.triggerButton, out buttonState))
+        else if (device == _rightController)
         {
-            if (_isLeftTriggerDown != buttonState)
-            {
-                _isLeftTriggerDown = buttonState;
-                LeftTrigger();
-            }
-        }
-        
-        // LEFT GRIP
-        if (_leftController.TryGetFeatureValue(CommonUsages.gripButton, out buttonState))
-        {
-            if (_isLeftGripDown != buttonState)
-            {
-                _isLeftGripDown = buttonState;
-                LeftGrip();
-            }
-        }
-
-        // MENU BUTTON (LEFT)
-        if (_leftController.TryGetFeatureValue(CommonUsages.menuButton, out buttonState))
-        {
-            if (_isMenuButtonDown != buttonState)
-            {
-                _isMenuButtonDown = buttonState;
-                MenuButton();
-            }
-        }
-        
-        // RIGHT STICK
-        if (_rightController.TryGetFeatureValue(CommonUsages.primary2DAxis, out stickAxis))
-        {
-            if (_rightControllerStickAxis != stickAxis)
-            {
-                _rightControllerStickAxis = stickAxis;
-                RightStickMove();
-            }
-        }
-        
-        // RIGHT TRIGGER
-        if (_rightController.TryGetFeatureValue(CommonUsages.triggerButton, out buttonState))
-        {
-            if (_isRightTriggerDown != buttonState)
-            {
-                _isRightTriggerDown = buttonState;
-                RightTrigger();
-            }
-        }
-        
-        // RIGHT GRIP
-        if (_rightController.TryGetFeatureValue(CommonUsages.gripButton, out buttonState))
-        {
-            if (_isRightGripDown != buttonState)
-            {
-                _isRightGripDown = buttonState;
-                RightGrip();
-            }
+            _hasRightController = false;
         }
     }
     
@@ -198,6 +142,105 @@ public class InputManager : MonoBehaviour
     }
     
 #endregion
+
+    private void LeftControllerUpdate()
+    {
+        if (!_hasLeftController)
+        {
+            return;
+        }
+        
+        Vector2 stickAxis;
+        bool buttonState;
+
+        // LEFT STICK
+        if (_leftController.TryGetFeatureValue(CommonUsages.primary2DAxis, out stickAxis))
+        {
+            if (_leftControllerStickAxis != stickAxis)
+            {
+                _leftControllerStickAxis = stickAxis;
+                LeftStickMove();
+            }
+        }
+
+        // LEFT TRIGGER
+        if (_leftController.TryGetFeatureValue(CommonUsages.triggerButton, out buttonState))
+        {
+            if (_isLeftTriggerDown != buttonState)
+            {
+                _isLeftTriggerDown = buttonState;
+                LeftTrigger();
+            }
+        }
+
+        // LEFT GRIP
+        if (_leftController.TryGetFeatureValue(CommonUsages.gripButton, out buttonState))
+        {
+            if (_isLeftGripDown != buttonState)
+            {
+                _isLeftGripDown = buttonState;
+                LeftGrip();
+            }
+        }
+
+        // MENU BUTTON (LEFT)
+        if (_leftController.TryGetFeatureValue(CommonUsages.menuButton, out buttonState))
+        {
+            if (_isMenuButtonDown != buttonState)
+            {
+                _isMenuButtonDown = buttonState;
+                MenuButton();
+            }
+        }
+    }
+
+    private void RightControllerUpdate()
+    {
+        if (!_hasRightController)
+        {
+            return;
+        }
+        
+        Vector2 stickAxis;
+        bool buttonState;
+
+        // RIGHT STICK
+        if (_rightController.TryGetFeatureValue(CommonUsages.primary2DAxis, out stickAxis))
+        {
+            if (_rightControllerStickAxis != stickAxis)
+            {
+                _rightControllerStickAxis = stickAxis;
+                RightStickMove();
+            }
+        }
+        
+        // RIGHT TRIGGER
+        if (_rightController.TryGetFeatureValue(CommonUsages.triggerButton, out buttonState))
+        {
+            if (_isRightTriggerDown != buttonState)
+            {
+                _isRightTriggerDown = buttonState;
+                RightTrigger();
+            }
+        }
+        
+        // RIGHT GRIP
+        if (_rightController.TryGetFeatureValue(CommonUsages.gripButton, out buttonState))
+        {
+            if (_isRightGripDown != buttonState)
+            {
+                _isRightGripDown = buttonState;
+                RightGrip();
+            }
+        }
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        LeftControllerUpdate();
+        RightControllerUpdate();
+    }
     
 #region Event invoking
     
