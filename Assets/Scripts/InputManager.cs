@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
@@ -62,18 +63,57 @@ public class InputManager : MonoBehaviour
         
         // Always keep this object alive
         DontDestroyOnLoad(gameObject);
-        
+    }
+
+    private void Start()
+    {
+        StartCoroutine(FetchControllerLeft());
+        StartCoroutine(FetchControllerRight());
         InputDevices.deviceConnected += DeviceConnected;
         InputDevices.deviceDisconnected += DeviceDisconnected;
+    }
+
+    private IEnumerator FetchControllerLeft()
+    {
+        List<InputDevice> leftHandedControllers = new List<InputDevice>();
+        InputDeviceCharacteristics characteristicsLeft = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left;
+        InputDevices.GetDevicesWithCharacteristics(characteristicsLeft, leftHandedControllers);
+        if (leftHandedControllers.Count > 0)
+        {
+            _leftController = leftHandedControllers[0];
+            _hasLeftController = true;
+            yield break;
+        }
+
+        // Keep searching for the controller if it has not been found yet
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(FetchControllerLeft());
+    }
+    
+    private IEnumerator FetchControllerRight()
+    {
+        List<InputDevice> rightHandedControllers = new List<InputDevice>();
+        InputDeviceCharacteristics characteristicsRight = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
+        InputDevices.GetDevicesWithCharacteristics(characteristicsRight, rightHandedControllers);
+        if (rightHandedControllers.Count > 0)
+        {
+            _rightController = rightHandedControllers[0];
+            _hasRightController = true;
+            yield break;
+        }
+        
+        // Keep searching for the controller if it has not been found yet
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(FetchControllerRight());
     }
     
     private void DeviceConnected(InputDevice device)
     {
-        TryGetLeftController(device);
-        TryGetRightController(device);
+        UpdateLeftController(device);
+        UpdateRightController(device);
     }
     
-    private void TryGetLeftController(InputDevice device)
+    private void UpdateLeftController(InputDevice device)
     {
         if (_hasLeftController || _leftController == device)
         {
@@ -88,7 +128,7 @@ public class InputManager : MonoBehaviour
         }
     }
     
-    private void TryGetRightController(InputDevice device)
+    private void UpdateRightController(InputDevice device)
     {
         if (_hasRightController || _rightController == device)
         {
