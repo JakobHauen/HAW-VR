@@ -4,11 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(BoxCollider))]
-public abstract class UIButton : MonoBehaviour
+public abstract class UISlider : MonoBehaviour
 {
     private RectTransform _rectTransform;
 
-    private Image _image;
+    [SerializeField]
+    protected Slider _slider;
+
+    [SerializeField]
+    private Image _handle;
 
     private BoxCollider _collider;
 
@@ -16,7 +20,7 @@ public abstract class UIButton : MonoBehaviour
     private Color _normalColor = Color.white,
         _hoverColor = Color.white,
         _pressedColor = Color.white,
-        _disabledColor = new Color(0.5f, 0.5f, 0.5f);
+        _disabledColor = Color.white;
 
     public bool isEnabled = true;
 
@@ -24,39 +28,44 @@ public abstract class UIButton : MonoBehaviour
     {
         _rectTransform = GetComponent<RectTransform>();
 
-        _image = GetComponent<Image>();
-        _image.color = isEnabled ? _normalColor : _disabledColor;
+        if (!_slider)
+        {
+            Slider s = GetComponent<Slider>();
+            if (s)
+            {
+                _slider = s;
+            }
+        }
+        _handle.color = isEnabled ? _normalColor : _disabledColor;
     }
 
     public void SetState(bool state)
     {
         isEnabled = state;
-        _image.color = state ? _normalColor : _disabledColor;
+        _handle.color = state ? _normalColor : _disabledColor;
     }
 
     public virtual void OnPointerEnter()
     {
-        _image.color = _hoverColor;
+        _handle.color = _hoverColor;
     }
 
     public virtual void OnPointerLeave()
     {
-        _image.color = _normalColor;
+        _handle.color = _normalColor;
     }
 
     public virtual void OnClick()
     {
-        _image.color = _pressedColor;
-
-        StartCoroutine(C_BackToNormalColor());
+        _handle.color = _pressedColor;
     }
 
-    IEnumerator C_BackToNormalColor()
+    protected IEnumerator C_BackToNormalColor()
     {
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
-        _image.color = _normalColor;
+        _handle.color = _normalColor;
     }
 }

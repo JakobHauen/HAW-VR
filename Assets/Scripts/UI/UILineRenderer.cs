@@ -7,6 +7,9 @@ public class UILineRenderer : MonoBehaviour
 {
     private LineRenderer _renderer;
 
+    [SerializeField]
+    private float _defaultLength = 2;
+
     private void Awake()
     {
         _renderer = GetComponent<LineRenderer>();
@@ -19,14 +22,43 @@ public class UILineRenderer : MonoBehaviour
         transform.rotation = InputManager.Instance.GetLeftControllerRotation();
     }
 
+    public void Enable()
+    {
+        _renderer.enabled = true;
+        enabled = true;
+    }
+
+    public void Disable()
+    {
+        _renderer.enabled = false;
+        enabled = false;
+    }
+
     public void SetTarget(Vector3 targetWorldPos)
     {
-        Vector3 targetLocalPos = transform.InverseTransformPoint(targetWorldPos);
-        _renderer.SetPosition(1, targetLocalPos);
+        Vector3 start = transform.position;
+        Vector3 dir = targetWorldPos - start;
+
+        float step = 1 / (_renderer.positionCount - 1);
+        for (int i = 1; i < _renderer.positionCount - 1; i++)
+        {
+            Vector3 target = start + ((i * step) * dir);
+            Vector3 targetLocalPos = transform.InverseTransformPoint(target);
+            _renderer.SetPosition(i, targetLocalPos);
+        }   
     }
 
     public void ClearTarget()
     {
-        _renderer.SetPosition(1, Vector3.forward * 3);
+        Vector3 start = transform.position;
+        Vector3 dir = transform.forward * _defaultLength;
+
+        float step = 1 / (_renderer.positionCount - 1);
+        for (int i = 0; i < _renderer.positionCount - 1; i++)
+        {
+            Vector3 target = start + ((i * step) * dir);
+            Vector3 targetLocalPos = transform.InverseTransformPoint(target);
+            _renderer.SetPosition(i, targetLocalPos);
+        }
     }
 }

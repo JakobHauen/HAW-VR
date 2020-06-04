@@ -5,13 +5,12 @@ using UnityEngine;
 public class UIPointer : MonoBehaviour
 {
     private UILineRenderer _uiLineRenderer;
-
     private UIButton _lastHitButton;
+    private UISlider _lastHitSlider;
 
     private void Awake()
     {
         _uiLineRenderer = GetComponentInChildren<UILineRenderer>();
-        InputManager.Instance.OnLeftTriggerDown += OnButtonClick;
 
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
@@ -20,39 +19,91 @@ public class UIPointer : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        int layer = LayerMask.NameToLayer("UI");
+        int layer = LayerMask.GetMask("UI");
 
         Vector3 forward = InputManager.Instance.GetLeftControllerRotation() * Vector3.forward;
         Ray ray = new Ray(InputManager.Instance.GetLeftControllerPosition(), forward);
+
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 100, layer)) {
-            UIButton target = hitInfo.transform.GetComponent<UIButton>();
-            if (!_lastHitButton)
+            UIButton targetButton = hitInfo.transform.GetComponent<UIButton>();
+
+            if (targetButton && targetButton.isEnabled)
             {
-                _lastHitButton = target;
-                _lastHitButton.OnPointerEnter();
+                if (!_lastHitButton)
+                {
+                    _lastHitButton = targetButton;
+                    _lastHitButton.OnPointerEnter();
+                }
+                else if (_lastHitButton && _lastHitButton != targetButton)
+                {
+                    _lastHitButton.OnPointerLeave();
+                    _lastHitButton = targetButton;
+                    _lastHitButton.OnPointerEnter();
+                }
+
+                _uiLineRenderer.SetTarget(hitInfo.point);
             }
-            else if (_lastHitButton && _lastHitButton != target)
+            else
+            {
+                UISlider targetSlider = hitInfo.transform.GetComponent<UISlider>();
+                if (targetSlider && targetSlider.isEnabled)
+                {
+                    if (!_lastHitSlider)
+                    {
+                        _lastHitSlider = targetSlider;
+                        _lastHitSlider.OnPointerEnter();
+                    }
+                    else if (_lastHitSlider && _lastHitSlider != targetSlider)
+                    {
+                        _lastHitSlider.OnPointerLeave();
+                        _lastHitSlider = targetSlider;
+                        _lastHitSlider.OnPointerEnter();
+                    }
+
+                    _uiLineRenderer.SetTarget(hitInfo.point);
+                }
+            }
+        }
+        else
+        {
+            if (_lastHitButton)
             {
                 _lastHitButton.OnPointerLeave();
-                _lastHitButton = target;
-                _lastHitButton.OnPointerEnter();
+                _lastHitButton = null;
+                _uiLineRenderer.ClearTarget();
+            }   
+            else if (_lastHitSlider)
+            {
+                _lastHitSlider.OnPointerLeave();
+                _lastHitSlider = null;
+                _uiLineRenderer.ClearTarget();
             }
+        }
+    }
 
-            _uiLineRenderer.SetTarget(hitInfo.point);
-        }
-        else if (_lastHitButton)
-        {
-            _lastHitButton.OnPointerLeave();
-            _lastHitButton = null;
-            _uiLineRenderer.ClearTarget();
-        }
+    public void Enable()
+    {
+        InputManager.Instance.OnLeftTriggerDown += OnButtonClick;
+        _uiLineRenderer.Enable();
+        enabled = true;
+    }
+
+    public void Disable()
+    {
+        InputManager.Instance.OnLeftTriggerDown -= OnButtonClick;
+        _uiLineRenderer.Disable();
+        enabled = false;
     }
 
     private void OnButtonClick()
     {
-        if (_lastHitButton)
+        if (_lastHitButton && _lastHitButton.isEnabled)
         {
             _lastHitButton.OnClick();
+        }
+        else if (_lastHitSlider && _lastHitSlider.isEnabled)
+        {
+            _lastHitSlider.OnClick();
         }
     }
 }
