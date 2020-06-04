@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(MovementTrajectory))]
@@ -13,6 +14,9 @@ public class MovementController : MonoBehaviour
     private MovementCircle _circle;
     private Transform _circleTransform;
     private Vector3 _lastTargetPosition;
+
+    private int _floorLayer, _snapLayer;
+    private LayerMask _raycastLayers;
 
     [SerializeField] 
     private Color _indicatorColor;
@@ -50,6 +54,10 @@ public class MovementController : MonoBehaviour
         
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
+
+        _floorLayer = LayerMask.NameToLayer("Floor");
+        _snapLayer = LayerMask.NameToLayer("TeleportSnapPoint");
+        _raycastLayers = LayerMask.GetMask("Floor", "TeleportSnapPoint");
     }
 
     private void Start()
@@ -65,13 +73,19 @@ public class MovementController : MonoBehaviour
         InputManager.Instance.OnLeftStickMove += OnLeftStickMove;
     }
 
+    // // DEBUG
+    // private void Update()
+    // {
+    //     PreviewMovement(transform.position, transform.rotation);
+    // }
+
     private void OnLeftStickMove(Vector2 stickAxis)
     {
         if (stickAxis.y > 0.8f)
         {
             PreviewMovement(InputManager.Instance.GetLeftControllerPosition(), InputManager.Instance.GetLeftControllerRotation());
         }
-        else
+        else if (Math.Abs(stickAxis.y) < 0.01f)
         {
             Move();
         }
@@ -80,18 +94,42 @@ public class MovementController : MonoBehaviour
     private void PreviewMovement(Vector3 raycastOrigin, Quaternion raycastRotation)
     {
         Ray ray = new Ray(raycastOrigin, raycastRotation * Vector3.forward);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo))
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 100, _raycastLayers))
         {
-            _lastTargetPosition = hitInfo.point;
+            Quaternion rotation = Quaternion.identity;
+            
+            int hitLayer = hitInfo.transform.gameObject.layer;
+            if (hitLayer == _floorLayer)
+            {
+                _lastTargetPosition = hitInfo.point;
+                rotation = raycastRotation;
+            }
+            else if (hitLayer == _snapLayer)
+            {
+                Bounds bounds = hitInfo.collider.bounds;
+                Vector3 targetPosition = bounds.center;
+                targetPosition.y += bounds.extents.y;
+                
+                _lastTargetPosition = targetPosition;
+
+                Vector3 forward = _lastTargetPosition - raycastOrigin;
+                Quaternion lookRotation = Quaternion.LookRotation(forward);
+                
+                // Vector3 raycastRotationEuler = raycastRotation.eulerAngles;
+                // rotation = Quaternion.Euler(raycastRotationEuler.x, lookRotation.eulerAngles.y, raycastRotationEuler.z);
+                rotation = lookRotation;
+            }
             
             _circle.EnableLineRenderer();
             _circleTransform.position = _lastTargetPosition;
             
             _trajectory.EnableLineRenderer();
-            _trajectory.DrawTrajectory(raycastOrigin, raycastRotation, _lastTargetPosition);
+            _trajectory.DrawTrajectory(raycastOrigin, rotation, _lastTargetPosition);
+
         }
         else
         {
+            _lastTargetPosition = Vector3.zero;
             _trajectory.DisableLineRenderer();
             _circle.DisableLineRenderer();
         }
