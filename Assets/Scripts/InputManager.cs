@@ -69,12 +69,27 @@ public class InputManager : MonoBehaviour
     {
         StartCoroutine(FetchControllerLeft());
         StartCoroutine(FetchControllerRight());
+    }
+
+    private void OnEnable()
+    {
         InputDevices.deviceConnected += DeviceConnected;
         InputDevices.deviceDisconnected += DeviceDisconnected;
     }
 
+    private void OnDisable()
+    {
+        InputDevices.deviceConnected -= DeviceConnected;
+        InputDevices.deviceDisconnected -= DeviceDisconnected;
+    }
+
     private IEnumerator FetchControllerLeft()
     {
+        if (_hasLeftController)
+        {
+            yield break;
+        }
+        
         List<InputDevice> leftHandedControllers = new List<InputDevice>();
         InputDeviceCharacteristics characteristicsLeft = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left;
         InputDevices.GetDevicesWithCharacteristics(characteristicsLeft, leftHandedControllers);
@@ -92,6 +107,11 @@ public class InputManager : MonoBehaviour
     
     private IEnumerator FetchControllerRight()
     {
+        if (_hasRightController)
+        {
+            yield break;
+        }
+        
         List<InputDevice> rightHandedControllers = new List<InputDevice>();
         InputDeviceCharacteristics characteristicsRight = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
         InputDevices.GetDevicesWithCharacteristics(characteristicsRight, rightHandedControllers);
@@ -115,7 +135,7 @@ public class InputManager : MonoBehaviour
     
     private void UpdateLeftController(InputDevice device)
     {
-        if (_hasLeftController || _leftController == device)
+        if (_hasLeftController)
         {
             return;
         }
@@ -130,7 +150,7 @@ public class InputManager : MonoBehaviour
     
     private void UpdateRightController(InputDevice device)
     {
-        if (_hasRightController || _rightController == device)
+        if (_hasRightController)
         {
             return;
         }
