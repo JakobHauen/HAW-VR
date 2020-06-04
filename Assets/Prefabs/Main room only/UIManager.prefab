@@ -233,7 +233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _normalColor: {r: 1, g: 1, b: 1, a: 1}
-  _hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  _hoverColor: {r: 1, g: 0.67058825, b: 1, a: 1}
   _pressedColor: {r: 1, g: 1, b: 1, a: 1}
   _disabledColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
   isEnabled: 1
@@ -2008,7 +2008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ffcf8f48ad121645936df9956773ff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultLength: 2
+  _defaultLength: 0.5
 --- !u!120 &1094059855772298137
 LineRenderer:
   m_ObjectHideFlags: 0
