@@ -70,19 +70,7 @@ public class InputManager : MonoBehaviour
         StartCoroutine(FetchControllerLeft());
         StartCoroutine(FetchControllerRight());
     }
-
-    private void OnEnable()
-    {
-        InputDevices.deviceConnected += DeviceConnected;
-        InputDevices.deviceDisconnected += DeviceDisconnected;
-    }
-
-    private void OnDisable()
-    {
-        InputDevices.deviceConnected -= DeviceConnected;
-        InputDevices.deviceDisconnected -= DeviceDisconnected;
-    }
-
+    
     private IEnumerator FetchControllerLeft()
     {
         if (_hasLeftController)
@@ -125,6 +113,18 @@ public class InputManager : MonoBehaviour
         // Keep searching for the controller if it has not been found yet
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(FetchControllerRight());
+    }
+
+    private void OnEnable()
+    {
+        InputDevices.deviceConnected += DeviceConnected;
+        InputDevices.deviceDisconnected += DeviceDisconnected;
+    }
+
+    private void OnDisable()
+    {
+        InputDevices.deviceConnected -= DeviceConnected;
+        InputDevices.deviceDisconnected -= DeviceDisconnected;
     }
     
     private void DeviceConnected(InputDevice device)
