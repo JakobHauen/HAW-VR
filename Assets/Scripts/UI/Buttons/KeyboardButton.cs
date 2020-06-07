@@ -49,8 +49,10 @@ public class KeyboardButton : UIButton
         _targetTextField = textfield;
     }
     
-    public override void OnClick()
+    public override void OnClick(Vector3 hitPoint)
     {
+        base.OnClick(hitPoint);
+
         if (_isBackspace)
         {
             _targetTextField.text = _targetTextField.text.Substring(0, _targetTextField.text.Length - 1);

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class QuitGameButton : UIButton
 {
-    public override void OnClick()
+    public override void OnClick(Vector3 hitPoint)
     {
-        base.OnClick();
+        base.OnClick(hitPoint);
         Application.Quit();
     }
 }

@@ -6,6 +6,7 @@ public class UIPointer : MonoBehaviour
 {
     private UILineRenderer _uiLineRenderer;
     private UIInteractable _lastHitInteractable;
+    private Vector3 _lastHitPoint;
 
     private void Awake()
     {
@@ -25,7 +26,8 @@ public class UIPointer : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 100, layer))
         {
-            _uiLineRenderer.SetTarget(hitInfo.point);
+            _lastHitPoint = hitInfo.point;
+            _uiLineRenderer.SetTarget(_lastHitPoint);
 
             UIInteractable target = hitInfo.transform.GetComponent<UIInteractable>();
             if (target && target.isEnabled)
@@ -69,7 +71,7 @@ public class UIPointer : MonoBehaviour
     {
         if (_lastHitInteractable && _lastHitInteractable.isEnabled)
         {
-            _lastHitInteractable.OnClick();
+            _lastHitInteractable.OnClick(_lastHitPoint);
         }
     }
 }

@@ -34,7 +34,7 @@ public abstract class UIButton : UIInteractable
         _isHovered = false;
     }
 
-    public override void OnClick()
+    public override void OnClick(Vector3 hitPoint)
     {
         _image.color = _pressedColor;
 

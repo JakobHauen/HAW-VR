@@ -21,7 +21,7 @@ public abstract class UIInteractable : MonoBehaviour
 
     public abstract void OnPointerLeave();
 
-    public abstract void OnClick();
+    public abstract void OnClick(Vector3 hitPoint);
 
     protected abstract IEnumerator C_ChangeBackColor();
 }

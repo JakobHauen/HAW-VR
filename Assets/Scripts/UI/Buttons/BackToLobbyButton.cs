@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class BackToLobbyButton : UIButton
 {
-    public override void OnClick()
+    public override void OnClick(Vector3 hitPoint)
     {
-        base.OnClick();
+        base.OnClick(hitPoint);
         SceneManager.LoadScene(0);
     }
 }

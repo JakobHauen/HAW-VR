@@ -7,35 +7,52 @@ public class VolumeSlider : UISlider
 {
     private bool _isDragging;
 
-    private Vector3 _sliderLeftEnd, _sliderRightEnd;
+    private float _sliderLeftX, _sliderRightX, _sliderStartEndDistance;
 
     protected override void Awake()
     {
         base.Awake();
 
         _slider.value = 0;
-        _sliderLeftEnd = transform.position;
+        Vector3 sliderLeftEnd = transform.InverseTransformPoint(_colorFeedbackImage.transform.position);
+        _sliderLeftX = sliderLeftEnd.x;
 
         _slider.value = 1;
-        _sliderRightEnd = transform.position;
+        Vector3 sliderRightEnd = transform.InverseTransformPoint(_colorFeedbackImage.transform.position);
+        _sliderRightX = sliderRightEnd.x;
+
+        _sliderStartEndDistance = _sliderRightX - _sliderLeftX;
     }
 
+    /*
     private void Start()
     {
         InputManager.Instance.OnLeftTriggerUp += OnTriggerUp;
     }
+    */
 
-    public override void OnClick()
+    public override void OnClick(Vector3 hitPoint)
     {
-        base.OnClick();
+        base.OnClick(hitPoint);
 
+        Vector3 localHitPoint = transform.InverseTransformPoint(hitPoint);
+        float hitX = localHitPoint.x;
+        float hitDistance = hitX - _sliderLeftX;
+        float pos = hitDistance / _sliderStartEndDistance;
+        _slider.value = pos;
+
+        AudioListener.volume = pos;
+
+        /*
         if (!_isDragging)
         {
             StartCoroutine(C_Drag());
             _isDragging = true;
         }
+        */
     }
 
+    /*
     private void OnTriggerUp()
     {
         _isDragging = false;
@@ -50,4 +67,5 @@ public class VolumeSlider : UISlider
 
         StartCoroutine(C_ChangeBackColor());
     }
+    */
 }

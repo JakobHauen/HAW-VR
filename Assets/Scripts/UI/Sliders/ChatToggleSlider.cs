@@ -12,9 +12,9 @@ public class ChatToggleSlider : UISlider
         _slider.value = 1;
     }
 
-    public override void OnClick()
+    public override void OnClick(Vector3 hitPoint)
     {
-        base.OnClick();
+        base.OnClick(hitPoint);
 
         if (_slider.value == 0)
         {
