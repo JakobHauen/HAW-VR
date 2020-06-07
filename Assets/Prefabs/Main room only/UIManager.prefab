@@ -669,8 +669,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &454303023
 GameObject:
@@ -720,8 +720,6 @@ GameObject:
   - component: {fileID: 701694276}
   - component: {fileID: 701694278}
   - component: {fileID: 701694277}
-  - component: {fileID: 366598128}
-  - component: {fileID: 366598130}
   m_Layer: 5
   m_Name: Handle
   m_TagString: Untagged
@@ -763,7 +761,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 701694275}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -785,38 +783,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!65 &366598128
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 701694275}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 20, y: 20, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &366598130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 701694275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 546e46c37b1df0f4d8dfcd7dec428f8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _slider: {fileID: 1168125535}
-  _handle: {fileID: 701694277}
-  _normalColor: {r: 1, g: 1, b: 1, a: 1}
-  _hoverColor: {r: 1, g: 0.67058825, b: 1, a: 1}
-  _pressedColor: {r: 1, g: 1, b: 1, a: 1}
-  _disabledColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  isEnabled: 1
 --- !u!1 &733327217
 GameObject:
   m_ObjectHideFlags: 0
@@ -933,13 +899,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c20349bbfc9a354f8ad7d393f9cd058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slider: {fileID: 733327219}
-  _handle: {fileID: 1650102376}
   _normalColor: {r: 1, g: 1, b: 1, a: 1}
   _hoverColor: {r: 1, g: 0.67058825, b: 1, a: 1}
   _pressedColor: {r: 1, g: 1, b: 1, a: 1}
   _disabledColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   isEnabled: 1
+  _colorFeedbackImage: {fileID: 1650102376}
 --- !u!1 &803227345
 GameObject:
   m_ObjectHideFlags: 0
@@ -1290,6 +1255,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1168125534}
   - component: {fileID: 1168125535}
+  - component: {fileID: 1094059855159809034}
+  - component: {fileID: 1094059855159809033}
   m_Layer: 5
   m_Name: Volume_Slider
   m_TagString: Untagged
@@ -1369,6 +1336,37 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!65 &1094059855159809034
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168125533}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 160, y: 20, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1094059855159809033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168125533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 546e46c37b1df0f4d8dfcd7dec428f8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _normalColor: {r: 1, g: 0.852, b: 0.704, a: 1}
+  _hoverColor: {r: 1, g: 0.67058825, b: 1, a: 1}
+  _pressedColor: {r: 1, g: 1, b: 1, a: 1}
+  _disabledColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  isEnabled: 1
+  _colorFeedbackImage: {fileID: 1131053058}
 --- !u!1 &1378614147
 GameObject:
   m_ObjectHideFlags: 0
