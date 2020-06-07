@@ -25,6 +25,6 @@ public class ChatToggleSlider : UISlider
             _slider.value = 0;
         }
 
-        StartCoroutine(C_BackToNormalColor());
+        StartCoroutine(C_ChangeBackColor());
     }
 }

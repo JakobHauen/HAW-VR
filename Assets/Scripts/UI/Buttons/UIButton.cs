@@ -4,21 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(BoxCollider))]
-public abstract class UIButton : MonoBehaviour
+public abstract class UIButton : UIInteractable
 {
-    private RectTransform _rectTransform;
-
     private Image _image;
-
-    private BoxCollider _collider;
-
-    [SerializeField]
-    private Color _normalColor = Color.white,
-        _hoverColor = Color.white,
-        _pressedColor = Color.white,
-        _disabledColor = new Color(0.5f, 0.5f, 0.5f);
-
-    public bool isEnabled = true;
 
     protected virtual void Awake()
     {
@@ -34,29 +22,31 @@ public abstract class UIButton : MonoBehaviour
         _image.color = state ? _normalColor : _disabledColor;
     }
 
-    public virtual void OnPointerEnter()
+    public override void OnPointerEnter()
     {
         _image.color = _hoverColor;
+        _isHovered = true;
     }
 
-    public virtual void OnPointerLeave()
+    public override void OnPointerLeave()
     {
         _image.color = _normalColor;
+        _isHovered = false;
     }
 
-    public virtual void OnClick()
+    public override void OnClick()
     {
         _image.color = _pressedColor;
 
-        StartCoroutine(C_BackToNormalColor());
+        StartCoroutine(C_ChangeBackColor());
     }
 
-    IEnumerator C_BackToNormalColor()
+    protected override IEnumerator C_ChangeBackColor()
     {
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
-        _image.color = _normalColor;
+        _image.color = _isHovered ? _hoverColor : _normalColor;
     }
 }

@@ -4,25 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(BoxCollider))]
-public abstract class UISlider : MonoBehaviour
+public abstract class UISlider : UIInteractable
 {
-    private RectTransform _rectTransform;
-
     [SerializeField]
     protected Slider _slider;
 
     [SerializeField]
     private Image _handle;
-
-    private BoxCollider _collider;
-
-    [SerializeField]
-    private Color _normalColor = Color.white,
-        _hoverColor = Color.white,
-        _pressedColor = Color.white,
-        _disabledColor = Color.white;
-
-    public bool isEnabled = true;
 
     protected virtual void Awake()
     {
@@ -45,27 +33,29 @@ public abstract class UISlider : MonoBehaviour
         _handle.color = state ? _normalColor : _disabledColor;
     }
 
-    public virtual void OnPointerEnter()
+    public override void OnPointerEnter()
     {
         _handle.color = _hoverColor;
+        _isHovered = true;
     }
 
-    public virtual void OnPointerLeave()
+    public override void OnPointerLeave()
     {
         _handle.color = _normalColor;
+        _isHovered = false;
     }
 
-    public virtual void OnClick()
+    public override void OnClick()
     {
         _handle.color = _pressedColor;
     }
 
-    protected IEnumerator C_BackToNormalColor()
+    protected override IEnumerator C_ChangeBackColor()
     {
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
-        _handle.color = _normalColor;
+        _handle.color = _isHovered ? _hoverColor : _normalColor;
     }
 }

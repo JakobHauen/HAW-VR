@@ -5,8 +5,7 @@ using UnityEngine;
 public class UIPointer : MonoBehaviour
 {
     private UILineRenderer _uiLineRenderer;
-    private UIButton _lastHitButton;
-    private UISlider _lastHitSlider;
+    private UIInteractable _lastHitInteractable;
 
     private void Awake()
     {
@@ -24,60 +23,31 @@ public class UIPointer : MonoBehaviour
         Vector3 forward = InputManager.Instance.GetLeftControllerRotation() * Vector3.forward;
         Ray ray = new Ray(InputManager.Instance.GetLeftControllerPosition(), forward);
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, 100, layer)) {
-            UIButton targetButton = hitInfo.transform.GetComponent<UIButton>();
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 100, layer))
+        {
+            _uiLineRenderer.SetTarget(hitInfo.point);
 
-            if (targetButton && targetButton.isEnabled)
+            UIInteractable target = hitInfo.transform.GetComponent<UIInteractable>();
+            if (target && target.isEnabled)
             {
-                if (!_lastHitButton)
+                if (!_lastHitInteractable)
                 {
-                    _lastHitButton = targetButton;
-                    _lastHitButton.OnPointerEnter();
+                    _lastHitInteractable = target;
+                    _lastHitInteractable.OnPointerEnter();
                 }
-                else if (_lastHitButton && _lastHitButton != targetButton)
+                else if (_lastHitInteractable && _lastHitInteractable != target)
                 {
-                    _lastHitButton.OnPointerLeave();
-                    _lastHitButton = targetButton;
-                    _lastHitButton.OnPointerEnter();
-                }
-
-                _uiLineRenderer.SetTarget(hitInfo.point);
-            }
-            else
-            {
-                UISlider targetSlider = hitInfo.transform.GetComponent<UISlider>();
-                if (targetSlider && targetSlider.isEnabled)
-                {
-                    if (!_lastHitSlider)
-                    {
-                        _lastHitSlider = targetSlider;
-                        _lastHitSlider.OnPointerEnter();
-                    }
-                    else if (_lastHitSlider && _lastHitSlider != targetSlider)
-                    {
-                        _lastHitSlider.OnPointerLeave();
-                        _lastHitSlider = targetSlider;
-                        _lastHitSlider.OnPointerEnter();
-                    }
-
-                    _uiLineRenderer.SetTarget(hitInfo.point);
+                    _lastHitInteractable.OnPointerLeave();
+                    _lastHitInteractable = target;
+                    _lastHitInteractable.OnPointerEnter();
                 }
             }
         }
-        else
+        else if (_lastHitInteractable)
         {
-            if (_lastHitButton)
-            {
-                _lastHitButton.OnPointerLeave();
-                _lastHitButton = null;
-                _uiLineRenderer.ClearTarget();
-            }   
-            else if (_lastHitSlider)
-            {
-                _lastHitSlider.OnPointerLeave();
-                _lastHitSlider = null;
-                _uiLineRenderer.ClearTarget();
-            }
+            _lastHitInteractable.OnPointerLeave();
+            _lastHitInteractable = null;
+            _uiLineRenderer.ClearTarget();
         }
     }
 
@@ -97,13 +67,9 @@ public class UIPointer : MonoBehaviour
 
     private void OnButtonClick()
     {
-        if (_lastHitButton && _lastHitButton.isEnabled)
+        if (_lastHitInteractable && _lastHitInteractable.isEnabled)
         {
-            _lastHitButton.OnClick();
-        }
-        else if (_lastHitSlider && _lastHitSlider.isEnabled)
-        {
-            _lastHitSlider.OnClick();
+            _lastHitInteractable.OnClick();
         }
     }
 }

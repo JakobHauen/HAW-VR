@@ -48,6 +48,6 @@ public class VolumeSlider : UISlider
             yield return null;
         }
 
-        StartCoroutine(C_BackToNormalColor());
+        StartCoroutine(C_ChangeBackColor());
     }
 }
