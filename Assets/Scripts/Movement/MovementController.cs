@@ -71,7 +71,6 @@ public class MovementController : MonoBehaviour
         _trajectory.SetResolution(_indicatorResolution);
 
         InputManager.Instance.CurrentlyUsedController.OnStickMove += OnStickMove;
-        InputManager.Instance.OnCurrentlyUsedControllerUpdate += ResetPreview;
     }
 
     // // DEBUG

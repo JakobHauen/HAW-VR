@@ -75,11 +75,13 @@ public class InputManager : MonoBehaviour
     /// </summary>
     private void UpdateCurrentlyUsedControllerLeft()
     {
-        if (CurrentlyUsedController.GetDevice() != LeftController.GetDevice())
+        if (CurrentlyUsedController.GetDevice() == LeftController.GetDevice())
         {
-            CurrentlyUsedController.SetDevice(LeftController.GetDevice());
-            // OnCurrentlyUsedControllerUpdate?.Invoke();
+            return;
         }
+        
+        CurrentlyUsedController.SetDevice(LeftController.GetDevice());
+        OnCurrentlyUsedControllerUpdate?.Invoke();
     }
 
     /// <summary>
@@ -88,11 +90,13 @@ public class InputManager : MonoBehaviour
     /// </summary>
     private void UpdateCurrentlyUsedControllerRight()
     {
-        if (CurrentlyUsedController.GetDevice() != RightController.GetDevice())
+        if (CurrentlyUsedController.GetDevice() == RightController.GetDevice())
         {
-            CurrentlyUsedController.SetDevice(RightController.GetDevice());
-            // OnCurrentlyUsedControllerUpdate?.Invoke();
+            return;
         }
+        
+        CurrentlyUsedController.SetDevice(RightController.GetDevice());
+        OnCurrentlyUsedControllerUpdate?.Invoke();
     }
     
     private IEnumerator FetchController(XRInputDeviceController device, InputDeviceCharacteristics handedness)
