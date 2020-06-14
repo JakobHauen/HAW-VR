@@ -18,8 +18,8 @@ public class UILineRenderer : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        transform.position = InputManager.Instance.GetLeftControllerPosition();
-        transform.rotation = InputManager.Instance.GetLeftControllerRotation();
+        transform.position = InputManager.Instance.CurrentlyUsedController.Position;
+        transform.rotation = InputManager.Instance.CurrentlyUsedController.Rotation;
     }
 
     public void Enable()

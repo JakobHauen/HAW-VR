@@ -35,7 +35,7 @@ public class UIManager : MonoBehaviour
     {
         _menuCanvas.SetActive(false);
         _uiPointer.Disable();
-        InputManager.Instance.OnMenuButtonDown += OnMenuButton;
+        InputManager.Instance.LeftController.OnMenuButtonDown += OnMenuButton;
     }
 
     private void OnMenuButton()

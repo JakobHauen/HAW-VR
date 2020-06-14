@@ -70,7 +70,8 @@ public class MovementController : MonoBehaviour
         _trajectory.SetColor(_indicatorColor);
         _trajectory.SetResolution(_indicatorResolution);
 
-        InputManager.Instance.OnLeftStickMove += OnLeftStickMove;
+        InputManager.Instance.CurrentlyUsedController.OnStickMove += OnStickMove;
+        InputManager.Instance.OnCurrentlyUsedControllerUpdate += ResetPreview;
     }
 
     // // DEBUG
@@ -79,11 +80,11 @@ public class MovementController : MonoBehaviour
     //     PreviewMovement(transform.position, transform.rotation);
     // }
 
-    private void OnLeftStickMove(Vector2 stickAxis)
+    private void OnStickMove(Vector2 stickAxis)
     {
         if (stickAxis.y > 0.8f)
         {
-            PreviewMovement(InputManager.Instance.GetLeftControllerPosition(), InputManager.Instance.GetLeftControllerRotation());
+            PreviewMovement(InputManager.Instance.CurrentlyUsedController.Position, InputManager.Instance.CurrentlyUsedController.Rotation);
         }
         else if (Math.Abs(stickAxis.y) < 0.01f)
         {
@@ -129,10 +130,15 @@ public class MovementController : MonoBehaviour
         }
         else
         {
-            _lastTargetPosition = Vector3.zero;
-            _trajectory.DisableLineRenderer();
-            _circle.DisableLineRenderer();
+            ResetPreview();
         }
+    }
+
+    private void ResetPreview()
+    {
+        _lastTargetPosition = Vector3.zero;
+        _trajectory.DisableLineRenderer();
+        _circle.DisableLineRenderer();
     }
 
     private void Move()

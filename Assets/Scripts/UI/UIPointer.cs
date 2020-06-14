@@ -21,8 +21,8 @@ public class UIPointer : MonoBehaviour
     {
         int layer = LayerMask.GetMask("UI");
 
-        Vector3 forward = InputManager.Instance.GetLeftControllerRotation() * Vector3.forward;
-        Ray ray = new Ray(InputManager.Instance.GetLeftControllerPosition(), forward);
+        Vector3 forward = InputManager.Instance.CurrentlyUsedController.Rotation * Vector3.forward;
+        Ray ray = new Ray(InputManager.Instance.CurrentlyUsedController.Position, forward);
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 100, layer))
         {
@@ -55,14 +55,14 @@ public class UIPointer : MonoBehaviour
 
     public void Enable()
     {
-        InputManager.Instance.OnLeftTriggerDown += OnButtonClick;
+        InputManager.Instance.CurrentlyUsedController.OnTriggerDown += OnButtonClick;
         _uiLineRenderer.Enable();
         enabled = true;
     }
 
     public void Disable()
     {
-        InputManager.Instance.OnLeftTriggerDown -= OnButtonClick;
+        InputManager.Instance.CurrentlyUsedController.OnTriggerDown -= OnButtonClick;
         _uiLineRenderer.Disable();
         enabled = false;
     }

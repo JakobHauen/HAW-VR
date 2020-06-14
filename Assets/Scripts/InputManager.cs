@@ -11,110 +11,11 @@ public class InputManager : MonoBehaviour
     /// </summary>
     public static InputManager Instance { get; private set; }
     
-    private InputDevice _leftController, _rightController;
-    private bool _hasLeftController, _hasRightController;
-
-    #region Input Values
+    [NonSerialized]
+    public XRInputDeviceController LeftController, RightController, CurrentlyUsedController;
     
-    private Vector2 _leftControllerStickAxis  = Vector2.zero,
-                    _rightControllerStickAxis = Vector2.zero;
-
-    private bool _isLeftTriggerDown,
-        _isLeftGripDown,
-        _isMenuButtonDown,
-        _isRightTriggerDown,
-        _isRightGripDown;
+    public event Action OnCurrentlyUsedControllerUpdate;
     
-#endregion
-    
-#region Event declarations
-    
-#region Left Controller
-    
-    public event Action<Vector2> OnLeftStickMove;
-    public event Action OnLeftTriggerDown;    
-    public event Action OnLeftTriggerUp;
-    public event Action OnLeftGripDown;
-    public event Action OnLeftGripUp;
-    public event Action OnMenuButtonDown;
-    public event Action OnMenuButtonUp;
-    #endregion
-
-#region Right Controller
-    
-    public event Action<Vector2> OnRightStickMove;
-    public event Action OnRightTriggerDown;    
-    public event Action OnRightTriggerUp;
-    public event Action OnRightGripDown;
-    public event Action OnRightGripUp;
-
-#endregion
-    
-#endregion
-    
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        } else {
-            Instance = this;
-        }
-        
-        // Always keep this object alive
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start()
-    {
-        StartCoroutine(FetchControllerLeft());
-        StartCoroutine(FetchControllerRight());
-    }
-    
-    private IEnumerator FetchControllerLeft()
-    {
-        if (_hasLeftController)
-        {
-            yield break;
-        }
-        
-        List<InputDevice> leftHandedControllers = new List<InputDevice>();
-        InputDeviceCharacteristics characteristicsLeft = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left;
-        InputDevices.GetDevicesWithCharacteristics(characteristicsLeft, leftHandedControllers);
-        if (leftHandedControllers.Count > 0)
-        {
-            _leftController = leftHandedControllers[0];
-            _hasLeftController = true;
-            yield break;
-        }
-
-        // Keep searching for the controller if it has not been found yet
-        yield return new WaitForSeconds(0.5f);
-        StartCoroutine(FetchControllerLeft());
-    }
-    
-    private IEnumerator FetchControllerRight()
-    {
-        if (_hasRightController)
-        {
-            yield break;
-        }
-        
-        List<InputDevice> rightHandedControllers = new List<InputDevice>();
-        InputDeviceCharacteristics characteristicsRight = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
-        InputDevices.GetDevicesWithCharacteristics(characteristicsRight, rightHandedControllers);
-        if (rightHandedControllers.Count > 0)
-        {
-            _rightController = rightHandedControllers[0];
-            _hasRightController = true;
-            yield break;
-        }
-        
-        // Keep searching for the controller if it has not been found yet
-        yield return new WaitForSeconds(0.5f);
-        StartCoroutine(FetchControllerRight());
-    }
-
     private void OnEnable()
     {
         InputDevices.deviceConnected += DeviceConnected;
@@ -127,252 +28,134 @@ public class InputManager : MonoBehaviour
         InputDevices.deviceDisconnected -= DeviceDisconnected;
     }
     
+    // This manager needs three controllers to work.
+    // Is called when the script is added to an object or the user resets the component.
+    private void Reset()
+    {
+        int numOfControllers = gameObject.GetComponents<XRInputDeviceController>().Length;
+
+        // Add up to three controllers
+        for (int i = 0; i < 3 - numOfControllers; i++)
+        {
+            gameObject.AddComponent<XRInputDeviceController>();
+        }
+    }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        } else {
+            Instance = this;
+        }
+        
+        // Always keep this object alive
+        DontDestroyOnLoad(gameObject);
+
+        XRInputDeviceController[] controllers = GetComponents<XRInputDeviceController>();
+        LeftController = controllers[0];
+        RightController = controllers[1];
+        CurrentlyUsedController = controllers[2];
+    }
+
+    private void Start()
+    {
+        StartCoroutine(FetchController(LeftController, InputDeviceCharacteristics.Left));
+        StartCoroutine(FetchController(RightController, InputDeviceCharacteristics.Right));
+
+        LeftController.OnAnyKeyDown += UpdateCurrentlyUsedControllerLeft;
+        RightController.OnAnyKeyDown += UpdateCurrentlyUsedControllerRight;
+    }
+    
+    
+    /// <summary>
+    /// Called when a button is clicked on the left controller.
+    /// Sets the device of the CurrentlyUsedController to the device of the left controller
+    /// </summary>
+    private void UpdateCurrentlyUsedControllerLeft()
+    {
+        if (CurrentlyUsedController.GetDevice() != LeftController.GetDevice())
+        {
+            CurrentlyUsedController.SetDevice(LeftController.GetDevice());
+            // OnCurrentlyUsedControllerUpdate?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// Called when a button is clicked on the right controller.
+    /// Sets the device of the CurrentlyUsedController to the device of the right controller
+    /// </summary>
+    private void UpdateCurrentlyUsedControllerRight()
+    {
+        if (CurrentlyUsedController.GetDevice() != RightController.GetDevice())
+        {
+            CurrentlyUsedController.SetDevice(RightController.GetDevice());
+            // OnCurrentlyUsedControllerUpdate?.Invoke();
+        }
+    }
+    
+    private IEnumerator FetchController(XRInputDeviceController device, InputDeviceCharacteristics handedness)
+    {
+        if (device.HasDevice())
+        {
+            yield break;
+        }
+        
+        List<InputDevice> controllers = new List<InputDevice>();
+        InputDeviceCharacteristics characteristicsLeft = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | handedness;
+        InputDevices.GetDevicesWithCharacteristics(characteristicsLeft, controllers);
+        if (controllers.Count > 0)
+        {
+            device.SetDevice(controllers[0]);
+            yield break;
+        }
+
+        // Keep searching for the controller if it has not been found yet
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(FetchController(device, handedness));
+    }
+    
     private void DeviceConnected(InputDevice device)
     {
-        UpdateLeftController(device);
-        UpdateRightController(device);
-    }
-    
-    private void UpdateLeftController(InputDevice device)
-    {
-        if (_hasLeftController)
-        {
-            return;
-        }
-        
-        InputDeviceCharacteristics desiredCharacteristics = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left;
-        if ((device.characteristics & desiredCharacteristics) == desiredCharacteristics)
-        {
-            _leftController = device;
-            _hasLeftController = true;
-        }
-    }
-    
-    private void UpdateRightController(InputDevice device)
-    {
-        if (_hasRightController)
-        {
-            return;
-        }
-        
-        InputDeviceCharacteristics desiredCharacteristics = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
-        if ((device.characteristics & desiredCharacteristics) == desiredCharacteristics)
-        {
-            _rightController = device;
-            _hasRightController = true;
-        }
+        UpdateController(device, LeftController, InputDeviceCharacteristics.Left);
+        UpdateController(device, RightController, InputDeviceCharacteristics.Right);
     }
 
+    private static void UpdateController(InputDevice device, XRInputDeviceController controller, InputDeviceCharacteristics handedness)
+    {
+        if (controller.HasDevice())
+        {
+            return;
+        }
+        
+        InputDeviceCharacteristics desiredCharacteristics = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller | handedness;
+        if ((device.characteristics & desiredCharacteristics) == desiredCharacteristics)
+        {
+            controller.SetDevice(device);
+        }
+    }
+    
     private void DeviceDisconnected(InputDevice device)
     {
-        if (device == _leftController)
+        if (device == LeftController.GetDevice())
         {
-            _hasLeftController = false;
-        }
-        else if (device == _rightController)
-        {
-            _hasRightController = false;
-        }
-    }
-    
-#region Controller Orientation
-
-    public Vector3 GetLeftControllerPosition()
-    {
-        Vector3 pos;
-        return _leftController.TryGetFeatureValue(CommonUsages.devicePosition, out pos) ? pos + OVRManager.instance.transform.position : Vector3.zero;
-    }
-
-    public Quaternion GetLeftControllerRotation()
-    {
-        Quaternion rot;
-        return _leftController.TryGetFeatureValue(CommonUsages.deviceRotation, out rot) ? rot : Quaternion.identity;
-    }
-
-    public Vector3 GetRightControllerPosition()
-    {
-        Vector3 pos;
-        return _rightController.TryGetFeatureValue(CommonUsages.devicePosition, out pos) ? pos + OVRManager.instance.transform.position : Vector3.zero;
-    }
-    
-    public Quaternion GetRightControllerRotation()
-    {
-        Quaternion rot;
-        return _rightController.TryGetFeatureValue(CommonUsages.deviceRotation, out rot) ? rot : Quaternion.identity;
-    }
-    
-#endregion
-
-    private void LeftControllerUpdate()
-    {
-        if (!_hasLeftController)
-        {
-            return;
-        }
-        
-        Vector2 stickAxis;
-        bool buttonState;
-
-        // LEFT STICK
-        if (_leftController.TryGetFeatureValue(CommonUsages.primary2DAxis, out stickAxis))
-        {
-            if (_leftControllerStickAxis != stickAxis)
+            if (CurrentlyUsedController.GetDevice() == LeftController.GetDevice())
             {
-                _leftControllerStickAxis = stickAxis;
-                LeftStickMove();
+                CurrentlyUsedController.ResetDevice();
             }
-        }
+            
+            LeftController.ResetDevice();
 
-        // LEFT TRIGGER
-        if (_leftController.TryGetFeatureValue(CommonUsages.triggerButton, out buttonState))
+        }
+        else if (device == RightController.GetDevice())
         {
-            if (_isLeftTriggerDown != buttonState)
+            if (CurrentlyUsedController.GetDevice() == RightController.GetDevice())
             {
-                _isLeftTriggerDown = buttonState;
-                LeftTrigger();
+                CurrentlyUsedController.ResetDevice();
             }
-        }
-
-        // LEFT GRIP
-        if (_leftController.TryGetFeatureValue(CommonUsages.gripButton, out buttonState))
-        {
-            if (_isLeftGripDown != buttonState)
-            {
-                _isLeftGripDown = buttonState;
-                LeftGrip();
-            }
-        }
-
-        // MENU BUTTON (LEFT)
-        if (_leftController.TryGetFeatureValue(CommonUsages.menuButton, out buttonState))
-        {
-            if (_isMenuButtonDown != buttonState)
-            {
-                _isMenuButtonDown = buttonState;
-                MenuButton();
-            }
+            
+            RightController.ResetDevice();
         }
     }
-
-    private void RightControllerUpdate()
-    {
-        if (!_hasRightController)
-        {
-            return;
-        }
-        
-        Vector2 stickAxis;
-        bool buttonState;
-
-        // RIGHT STICK
-        if (_rightController.TryGetFeatureValue(CommonUsages.primary2DAxis, out stickAxis))
-        {
-            if (_rightControllerStickAxis != stickAxis)
-            {
-                _rightControllerStickAxis = stickAxis;
-                RightStickMove();
-            }
-        }
-        
-        // RIGHT TRIGGER
-        if (_rightController.TryGetFeatureValue(CommonUsages.triggerButton, out buttonState))
-        {
-            if (_isRightTriggerDown != buttonState)
-            {
-                _isRightTriggerDown = buttonState;
-                RightTrigger();
-            }
-        }
-        
-        // RIGHT GRIP
-        if (_rightController.TryGetFeatureValue(CommonUsages.gripButton, out buttonState))
-        {
-            if (_isRightGripDown != buttonState)
-            {
-                _isRightGripDown = buttonState;
-                RightGrip();
-            }
-        }
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        LeftControllerUpdate();
-        RightControllerUpdate();
-    }
-    
-#region Event invoking
-    
-    private void LeftStickMove()
-    {
-        OnLeftStickMove?.Invoke(_leftControllerStickAxis);
-    }
-
-    private void LeftTrigger()
-    {
-        if (_isLeftTriggerDown)
-        {
-            OnLeftTriggerDown?.Invoke();
-        }
-        else
-        {
-            OnLeftTriggerUp?.Invoke();
-        }
-    }
-
-    private void LeftGrip()
-    {
-        if (_isLeftGripDown)
-        {
-            OnLeftGripDown?.Invoke();
-        }
-        else
-        {
-            OnLeftGripUp?.Invoke();
-        }
-    }
-
-    private void MenuButton()
-    {
-        if (_isMenuButtonDown)
-        {
-            OnMenuButtonDown?.Invoke();
-        }
-        else
-        {
-            OnMenuButtonUp?.Invoke();
-        }
-    }
-    
-    private void RightStickMove()
-    {
-        OnRightStickMove?.Invoke(_rightControllerStickAxis);
-    }
-    
-    private void RightTrigger()
-    {
-        if (_isRightTriggerDown)
-        {
-            OnRightTriggerDown?.Invoke();
-        }
-        else
-        {
-            OnRightTriggerUp?.Invoke();
-        }
-    }
-
-    private void RightGrip()
-    {
-        if (_isRightGripDown)
-        {
-            OnRightGripDown?.Invoke();
-        }
-        else
-        {
-            OnRightGripUp?.Invoke();
-        }
-    }
-    
-    #endregion
 }
