@@ -1055,16 +1055,6 @@ PrefabInstance:
       propertyPath: _screenFade
       value: 
       objectReference: {fileID: 446674533}
-    - target: {fileID: 5694686253954456214, guid: 3bb7fe92ca69ee4459714cc7fb995391,
-        type: 3}
-      propertyPath: m_fontSize
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 5694686253954456214, guid: 3bb7fe92ca69ee4459714cc7fb995391,
-        type: 3}
-      propertyPath: m_fontSizeBase
-      value: 16
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3bb7fe92ca69ee4459714cc7fb995391, type: 3}
 --- !u!1001 &7239129613403996160
