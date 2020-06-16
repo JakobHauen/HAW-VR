@@ -9,7 +9,8 @@ public class XRInputDeviceController : MonoBehaviour
     
     private Vector2 _controllerStickAxis = Vector2.zero;
 
-    private bool _isTriggerDown,
+    private bool _isStickMoving,
+        _isTriggerDown,
         _isGripDown,
         _isMenuButtonDown;
 
@@ -118,14 +119,21 @@ public class XRInputDeviceController : MonoBehaviour
     
     private void StickMove()
     {
-        if (_controllerStickAxis == Vector2.zero)
+        if (_controllerStickAxis.x < 0.01f && _controllerStickAxis.y < 0.01f)
         {
             OnStickRelease?.Invoke();
+            _isStickMoving = false;
         }
         else
         {
+            // If this is the first time moving the stick at this moment
+            if (!_isStickMoving)
+            {
+                AnyKeyDown();
+                _isStickMoving = true;
+            }
+            
             OnStickMove?.Invoke(_controllerStickAxis);
-            AnyKeyDown();
         }
     }
 
