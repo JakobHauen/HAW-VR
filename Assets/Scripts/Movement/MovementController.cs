@@ -14,6 +14,7 @@ public class MovementController : MonoBehaviour
     private MovementCircle _circle;
     private Transform _circleTransform;
     private Vector3 _lastTargetPosition;
+    private float _lastTargetPositionResetCounter = 0;
 
     private int _floorLayer, _snapLayer;
     private LayerMask _raycastLayers;
@@ -71,6 +72,8 @@ public class MovementController : MonoBehaviour
         _trajectory.SetResolution(_indicatorResolution);
 
         InputManager.Instance.CurrentlyUsedController.OnStickMove += OnStickMove;
+        InputManager.Instance.CurrentlyUsedController.OnStickRelease += OnStickRelease;
+
     }
 
     // // DEBUG
@@ -84,11 +87,23 @@ public class MovementController : MonoBehaviour
         if (stickAxis.y > 0.8f)
         {
             PreviewMovement(InputManager.Instance.CurrentlyUsedController.Position, InputManager.Instance.CurrentlyUsedController.Rotation);
+            _lastTargetPositionResetCounter = 0;
         }
-        else if (Math.Abs(stickAxis.y) < 0.01f)
+        else
         {
-            Move();
+            ResetPreview();
+            _lastTargetPositionResetCounter += Time.deltaTime;
+            if (_lastTargetPositionResetCounter > 0.2f)
+            {
+                _lastTargetPosition = Vector3.zero;
+                _lastTargetPositionResetCounter = 0;
+            }
         }
+    }
+
+    private void OnStickRelease()
+    {
+        Move();
     }
     
     private void PreviewMovement(Vector3 raycastOrigin, Quaternion raycastRotation)
@@ -130,12 +145,12 @@ public class MovementController : MonoBehaviour
         else
         {
             ResetPreview();
+            _lastTargetPosition = Vector3.zero;
         }
     }
 
     private void ResetPreview()
     {
-        _lastTargetPosition = Vector3.zero;
         _trajectory.DisableLineRenderer();
         _circle.DisableLineRenderer();
     }
@@ -147,8 +162,6 @@ public class MovementController : MonoBehaviour
             return;
         }
         
-        _trajectory.DisableLineRenderer();
-        _circle.DisableLineRenderer();
         StartCoroutine(C_Move());
     }
     
