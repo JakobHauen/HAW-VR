@@ -314,7 +314,7 @@ MonoBehaviour:
   fadeTime: 2
   fadeColor: {r: 0.01, g: 0.01, b: 0.01, a: 1}
   fadeOnStart: 0
-  renderQueue: 5000
+  renderQueue: 3999
 --- !u!1 &3623189699035361980
 GameObject:
   m_ObjectHideFlags: 0

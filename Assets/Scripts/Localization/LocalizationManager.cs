@@ -30,8 +30,6 @@ public class LocalizationManager : MonoBehaviour {
 			case RuntimePlatform.Android:
 				StartCoroutine(C_LoadAndroid(fileName));
 				break;
-			case RuntimePlatform.IPhonePlayer: break;
-			case RuntimePlatform.Switch:       break;
 			default:
 				LoadStandard(fileName);
 				break;
