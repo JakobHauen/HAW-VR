@@ -313,7 +313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeTime: 2
   fadeColor: {r: 0.01, g: 0.01, b: 0.01, a: 1}
-  fadeOnStart: 1
+  fadeOnStart: 0
   renderQueue: 5000
 --- !u!1 &3623189699035361980
 GameObject:
