@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
     // singleton pattern
     public static UIManager Instance { get; private set; }
 
+    private Camera _cam;
+
     [SerializeField]
     private GameObject _menuCanvas;
 
@@ -33,6 +35,8 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        _cam = Camera.main;
+
         _menuCanvas.SetActive(false);
         _uiPointer.Disable();
         InputManager.Instance.LeftController.OnMenuButtonDown += OnMenuButton;
@@ -47,6 +51,14 @@ public class UIManager : MonoBehaviour
         }
         else
         {
+            Vector3 pos = _menuCanvas.transform.position;
+            Vector3 targetPosition = _cam.transform.position + (_cam.transform.forward * 2);
+            targetPosition.y = pos.y;
+            _menuCanvas.transform.position = pos;
+
+            Quaternion rot = Quaternion.LookRotation(-_cam.transform.forward);
+            _menuCanvas.transform.rotation = Quaternion.Euler(0, rot.eulerAngles.y, 0);
+
             _menuCanvas.SetActive(true);
             _uiPointer.Enable();
         }
