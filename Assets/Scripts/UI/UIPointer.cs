@@ -44,12 +44,24 @@ public class UIPointer : MonoBehaviour
                     _lastHitInteractable.OnPointerEnter();
                 }
             }
+            else
+            {
+                ResetLastHit();
+            }
         }
         else if (_lastHitInteractable)
         {
+            ResetLastHit();
+            _uiLineRenderer.ClearTarget();
+        }
+    }
+
+    private void ResetLastHit()
+    {
+        if (_lastHitInteractable)
+        {
             _lastHitInteractable.OnPointerLeave();
             _lastHitInteractable = null;
-            _uiLineRenderer.ClearTarget();
         }
     }
 

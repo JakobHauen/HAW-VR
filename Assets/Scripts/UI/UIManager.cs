@@ -54,9 +54,9 @@ public class UIManager : MonoBehaviour
             Vector3 pos = _menuCanvas.transform.position;
             Vector3 targetPosition = _cam.transform.position + (_cam.transform.forward * 2);
             targetPosition.y = pos.y;
-            _menuCanvas.transform.position = pos;
+            _menuCanvas.transform.position = targetPosition;
 
-            Quaternion rot = Quaternion.LookRotation(-_cam.transform.forward);
+            Quaternion rot = Quaternion.LookRotation(_cam.transform.forward);
             _menuCanvas.transform.rotation = Quaternion.Euler(0, rot.eulerAngles.y, 0);
 
             _menuCanvas.SetActive(true);
