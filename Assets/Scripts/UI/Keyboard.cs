@@ -36,9 +36,6 @@ public class Keyboard : MonoBehaviour
             Instance = this;
         }
         
-        // Always keep this object alive
-        DontDestroyOnLoad(gameObject);
-        
         _buttonRows = new Transform[transform.childCount];
         for (int i = 0; i < _buttonRows.Length; i++)
         {
