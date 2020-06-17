@@ -1711,7 +1711,7 @@ MonoBehaviour:
   _disabledColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   isEnabled: 1
   _colorFeedbackImage: {fileID: 1131053058}
-  _width: 0
+  _width: 160
 --- !u!1 &1378614147
 GameObject:
   m_ObjectHideFlags: 0
