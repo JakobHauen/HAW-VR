@@ -37,16 +37,10 @@ public abstract class UIButton : UIInteractable
     public override void OnClick(Vector3 hitPoint)
     {
         _image.color = _pressedColor;
-
-        StartCoroutine(C_ChangeBackColor());
     }
 
-    protected override IEnumerator C_ChangeBackColor()
+    public override void OnClickUp()
     {
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-
         _image.color = _isHovered ? _hoverColor : _normalColor;
     }
 }

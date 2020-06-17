@@ -16,15 +16,8 @@ public class ChatToggleSlider : UISlider
     {
         base.OnClick(hitPoint);
 
-        if (_slider.value == 0)
-        {
-            _slider.value = 1;
-        }
-        else
-        {
-            _slider.value = 0;
-        }
-
-        StartCoroutine(C_ChangeBackColor());
+        _slider.value = (_slider.value == 0) ? 1 : 0;
     }
+
+    public override void OnDrag(Vector3 hitPoint) { }
 }
