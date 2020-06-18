@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _indicatorColor: {r: 0, g: 1, b: 1, a: 1}
-  _indicatorResolution: 20
+  _indicatorResolution: 24
   _playerController: {fileID: 0}
   _fadeDuration: 0.33
   _screenFade: {fileID: 0}

@@ -44,18 +44,32 @@ public class UIPointer : MonoBehaviour
                     _lastHitInteractable.OnPointerEnter();
                 }
             }
+            else
+            {
+                ResetLastHit();
+            }
         }
         else if (_lastHitInteractable)
         {
+            ResetLastHit();
+            _uiLineRenderer.ClearTarget();
+        }
+    }
+
+    private void ResetLastHit()
+    {
+        if (_lastHitInteractable)
+        {
             _lastHitInteractable.OnPointerLeave();
             _lastHitInteractable = null;
-            _uiLineRenderer.ClearTarget();
         }
     }
 
     public void Enable()
     {
         InputManager.Instance.CurrentlyUsedController.OnTriggerDown += OnButtonClick;
+        InputManager.Instance.CurrentlyUsedController.OnTrigger += OnButton;
+        InputManager.Instance.CurrentlyUsedController.OnTriggerUp += OnButtonUp;
         _uiLineRenderer.Enable();
         enabled = true;
     }
@@ -63,6 +77,8 @@ public class UIPointer : MonoBehaviour
     public void Disable()
     {
         InputManager.Instance.CurrentlyUsedController.OnTriggerDown -= OnButtonClick;
+        InputManager.Instance.CurrentlyUsedController.OnTrigger -= OnButton;
+        InputManager.Instance.CurrentlyUsedController.OnTriggerUp -= OnButtonUp;
         _uiLineRenderer.Disable();
         enabled = false;
     }
@@ -72,6 +88,25 @@ public class UIPointer : MonoBehaviour
         if (_lastHitInteractable && _lastHitInteractable.isEnabled)
         {
             _lastHitInteractable.OnClick(_lastHitPoint);
+        }
+    }
+
+    private void OnButton()
+    {
+        if (_lastHitInteractable && _lastHitInteractable.isEnabled)
+        {
+            if (_lastHitInteractable is UISlider s)
+            {
+                s.OnDrag(_lastHitPoint);
+            }
+        }
+    }
+
+    private void OnButtonUp()
+    {
+        if (_lastHitInteractable && _lastHitInteractable.isEnabled)
+        {
+            _lastHitInteractable.OnClickUp();
         }
     }
 }

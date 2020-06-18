@@ -42,12 +42,10 @@ public abstract class UISlider : UIInteractable
         _colorFeedbackImage.color = _pressedColor;
     }
 
-    protected override IEnumerator C_ChangeBackColor()
-    {
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
+    public abstract void OnDrag(Vector3 hitPoint);
 
+    public override void OnClickUp()
+    {
         _colorFeedbackImage.color = _isHovered ? _hoverColor : _normalColor;
     }
 }

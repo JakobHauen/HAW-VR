@@ -36,16 +36,16 @@ public class Keyboard : MonoBehaviour
             Instance = this;
         }
         
-        // Always keep this object alive
-        DontDestroyOnLoad(gameObject);
-        
         _buttonRows = new Transform[transform.childCount];
         for (int i = 0; i < _buttonRows.Length; i++)
         {
             _buttonRows[i] = transform.GetChild(i);
         }
         _rowWidths = new float[_buttonRows.Length];
-        
+    }
+
+    private void Start()
+    {
         _buttons = GetComponentsInChildren<KeyboardButton>();
         
         SetupButtons();
@@ -54,6 +54,9 @@ public class Keyboard : MonoBehaviour
         
         // Setup size of canvas
         GetComponent<RectTransform>().sizeDelta = new Vector2(_keyboardXSize, _keyboardYSize);
+        GetComponent<BoxCollider>().size = new Vector3(_keyboardXSize, _keyboardYSize, 0);
+        
+        gameObject.SetActive(false);
     }
 
     private void SetupButtons()
@@ -83,14 +86,6 @@ public class Keyboard : MonoBehaviour
             _rowWidths[i] -= _margin;
             
             indexOffset += buttonAmountInRow;
-
-            if (_targetTextField)
-            {
-                foreach (KeyboardButton button in _buttons)
-                { 
-                    button.SetTargetTextfield(_targetTextField);   
-                }
-            }
         }
     }
 
@@ -117,6 +112,11 @@ public class Keyboard : MonoBehaviour
         BoxCollider col = button.GetComponent<BoxCollider>();
         col.center = new Vector3(size.x / 2, -size.y / 2, 0);
         col.size = new Vector3(size.x, size.y, 0);
+
+        if (_targetTextField)
+        {
+            SetTargetTextfield(_targetTextField);
+        }
 
         return size.x;
     }

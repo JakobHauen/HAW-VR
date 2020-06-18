@@ -2,14 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
 
 [RequireComponent(typeof(TutorialController))]
 public class StartManager : MonoBehaviour
 {
-    [Header("Debug, will be overriden at runtime.")]
+    [Header("Debug")] 
+    [SerializeField] 
+    private bool _forceTutorial = false;
+    
+    [Header("Will be overriden at runtime.")]
     [SerializeField] 
     private SystemLanguage _language;
+    
+    
+    [Space]
     
     [SerializeField]
     private OVRScreenFade _screenFade;
@@ -50,8 +56,8 @@ public class StartManager : MonoBehaviour
         while (!LocalizationManager.Instance.IsReady) {
             yield return null;
         }
-
-        if (PlayerPrefs.HasKey("username"))
+        
+        if (PlayerPrefs.HasKey("username") && !_forceTutorial)
         {
             StartCoroutine(C_FadeIn());
         }
