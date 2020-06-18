@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class TutorialController : MonoBehaviour
 {
     private LocalizationManager _localizationManager;
+    private UIManager _uiManager;
     private Camera _cam;
     
     private OVRScreenFade _screenFade;
@@ -12,6 +15,8 @@ public class TutorialController : MonoBehaviour
     [SerializeField]
     private Canvas _tutorialCanvas;
     private TextMeshProUGUI _text;
+
+    private bool _hasEnteredName;
 
     [SerializeField] 
     private string _tutorialTextKey = "tutorial_";
@@ -21,13 +26,12 @@ public class TutorialController : MonoBehaviour
     public void SetupAndStart(OVRScreenFade screenFade)
     {
         _screenFade = screenFade;
-        
-        _tutorialCanvas.gameObject.SetActive(false);
         _text = _tutorialCanvas.GetComponentInChildren<TextMeshProUGUI>();
         
         _cam = Camera.main;
         
         _localizationManager = LocalizationManager.Instance;
+        _uiManager = UIManager.Instance;
         InputManager.Instance.CurrentlyUsedController.OnTriggerDown += OnTriggerDown;
         InputManager.Instance.CurrentlyUsedController.OnStickMove += OnStickMove;
 
@@ -67,16 +71,42 @@ public class TutorialController : MonoBehaviour
         yield return new WaitUntil(() => _isStickPushed);
         _isStickPushed = false;
         
-        // Show text 5 - 11 and listen to trigger
-        for (int i = 5; i < 12; i++)
+        // Show text 5 - 7 and listen to trigger
+        for (int i = 5; i < 8; i++)
         {
             _isTriggerDown = false;
             _text.text = _localizationManager.GetLocalizedText(_tutorialTextKey + i);
             yield return new WaitUntil(() => _isTriggerDown);
         }
+        
         _tutorialCanvas.gameObject.SetActive(false);
+        
+        // Now let user enter their name
+        _uiManager.OnTextSubmit += OnNameSubmit;
+        _uiManager.ShowKeyboard();
+        
+        yield return new WaitUntil(() => _hasEnteredName);
+        _uiManager.HideKeyboard();
+        _uiManager.OnTextSubmit -= OnNameSubmit;
+        
+        _tutorialCanvas.gameObject.SetActive(true);
 
+        // Show text 8 - 11 and listen to trigger
+        for (int i = 8; i < 12; i++)
+        {
+            _isTriggerDown = false;
+            _text.text = _localizationManager.GetLocalizedText(_tutorialTextKey + i);
+            yield return new WaitUntil(() => _isTriggerDown);
+        }
+        
+        _tutorialCanvas.gameObject.SetActive(false);
         FadeIn();
+    }
+
+    private void OnNameSubmit(string name)
+    {
+        PlayerPrefs.SetString("username", name);
+        _hasEnteredName = true;
     }
 
     public void FadeIn()

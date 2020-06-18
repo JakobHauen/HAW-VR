@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(UIPointer))]
@@ -13,10 +15,14 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject _menuCanvas, textFieldCanvas;
 
+    private TextMeshProUGUI _textField;
+
     private bool _isShowingMenu;
 
     private UIPointer _uiPointer;
     private Keyboard _keyboard;
+    
+    public event Action<string> OnTextSubmit;
 
     private void Awake()
     {
@@ -31,6 +37,7 @@ public class UIManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
+        _textField = textFieldCanvas.GetComponentInChildren<TextMeshProUGUI>();
         _uiPointer = GetComponent<UIPointer>();
     }
 
@@ -40,10 +47,10 @@ public class UIManager : MonoBehaviour
         _keyboard = Keyboard.Instance;
 
         _menuCanvas.SetActive(false);
+        textFieldCanvas.SetActive(false);
+        
         _uiPointer.Disable();
         InputManager.Instance.LeftController.OnMenuButtonDown += OnMenuButton;
-
-        ShowKeyboard();
     }
 
     private void OnMenuButton()
@@ -62,12 +69,28 @@ public class UIManager : MonoBehaviour
         _isShowingMenu = !_isShowingMenu;
     }
 
-    public void ShowKeyboard()
+    public void ShowKeyboard(bool hideMenu = true)
     {
+        _uiPointer.Enable();
+        
         PlaceUI(_keyboard.transform);
         PlaceUI(textFieldCanvas.transform);
 
-        _menuCanvas.SetActive(false);
+        if (hideMenu)
+        {
+            _menuCanvas.SetActive(false);
+        }
+    }
+
+    public void HideKeyboard(bool disablePointer = true)
+    {
+        _keyboard.gameObject.SetActive(false);
+        textFieldCanvas.SetActive(false);
+
+        if (disablePointer)
+        {
+            _uiPointer.Disable();
+        }
     }
 
     private void PlaceUI(Transform uiObject)
@@ -81,5 +104,11 @@ public class UIManager : MonoBehaviour
         uiObject.rotation = Quaternion.Euler(0, rot.eulerAngles.y, 0);
 
         uiObject.gameObject.SetActive(true);
+    }
+
+    public void SubmitText()
+    {
+        OnTextSubmit?.Invoke(_textField.text);
+        _textField.text = "";
     }
  }

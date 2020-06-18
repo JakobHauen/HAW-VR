@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c819596444af8428660ebd769a27c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _forceTutorial: 1
   _language: 15
   _screenFade: {fileID: 0}
 --- !u!114 &5694686252849815303
@@ -79,7 +80,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5694686253255600878
 RectTransform:
   m_ObjectHideFlags: 0
