@@ -17,8 +17,8 @@ public class NetworkController : MonoBehaviourPunCallbacks
     }
 
     // Update is called once per frame
-    void Update()
+    public override void OnDisconnected(Photon.Realtime.DisconnectCause cause)
     {
-        
+        Debug.Log("Disconnected from Server for reason " + cause.ToString() );
     }
 }
