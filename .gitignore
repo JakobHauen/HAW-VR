@@ -72,3 +72,9 @@ Desktop.ini
 .DS_Store
 OVRBuildConfig.asset
 
+# FMOD
+/Assets/FMODStudioCache.asset
+/Assets/FMODStudioCache.asset.meta
+fmod.log
+fmod_editor.log
+
