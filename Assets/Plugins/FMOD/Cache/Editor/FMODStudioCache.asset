@@ -56,6 +56,29 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 0
+--- !u!114 &-4548801952864162654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Videomapping Sounds/Videomapping - Change Room Style
+  m_EditorClassIdentifier: 
+  Path: event:/Videomapping Sounds/Videomapping - Change Room Style
+  guid: 4ae1b9a8fdf10e49810d9718a0c7fe2e
+  Banks:
+  - {fileID: -3534996726626027069}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 4999
 --- !u!114 &-3655876726859628475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,6 +115,47 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 0
+--- !u!114 &-3548224999050205552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Videomapping Sounds/Permanent Loop Organic
+  m_EditorClassIdentifier: 
+  Path: event:/Videomapping Sounds/Permanent Loop Organic
+  guid: b6de4863b8502c42a849543feb9a99e1
+  Banks:
+  - {fileID: -3534996726626027069}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-3534996726626027069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FMOD Source/Build/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637282550614180331
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
 --- !u!114 &-3396724191963059647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,7 +227,7 @@ MonoBehaviour:
   lastModified: 637282533629087844
   LoadResult: 0
   FileSizes: []
-  Exists: 1
+  Exists: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,19 +242,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: 8262954427617087285}
-  - {fileID: -1188797134091147522}
+  - {fileID: -3534996726626027069}
   EditorEvents:
   - {fileID: 8434608771326160089}
   - {fileID: 6643904820672113612}
   - {fileID: 4007193478184638502}
   - {fileID: 5656875272252142835}
+  - {fileID: -4548801952864162654}
+  - {fileID: -3548224999050205552}
+  - {fileID: 1805793274836951978}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -1188797134091147522}
+  - {fileID: -3534996726626027069}
   StringsBanks:
   - {fileID: 8262954427617087285}
-  stringsBankWriteTime: 637282533629182444
+  stringsBankWriteTime: 637282550614259685
   cacheVersion: 3
+--- !u!114 &255093814504661096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FMOD Source/Build/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637282549353836287
+  LoadResult: 0
+  FileSizes: []
+  Exists: 0
 --- !u!114 &1087032725727824981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +312,29 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 0
+--- !u!114 &1805793274836951978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Videomapping Sounds/Permanent Loop Electronic
+  m_EditorClassIdentifier: 
+  Path: event:/Videomapping Sounds/Permanent Loop Electronic
+  guid: dd94ff25babba64e9e88fd8a7676055f
+  Banks:
+  - {fileID: -3534996726626027069}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &3080377089775418285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,7 +368,7 @@ MonoBehaviour:
   Path: event:/Lobby Sounds/UI/Entering Room
   guid: b37928266bb04540a189e5f0e6f62811
   Banks:
-  - {fileID: -1188797134091147522}
+  - {fileID: -3534996726626027069}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -301,14 +409,14 @@ MonoBehaviour:
   Path: event:/Lobby Sounds/UI/Button
   guid: efac6aab6909e1409ac20356cdec24b9
   Banks:
-  - {fileID: -1188797134091147522}
+  - {fileID: -3534996726626027069}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
-  Length: 0
+  Length: 500
 --- !u!114 &6643904820672113612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,7 +432,7 @@ MonoBehaviour:
   Path: event:/Lobby Sounds/Ambience/Lobby Ambience
   guid: 32adacedd5dfe04f8e57ee7136bf5c3c
   Banks:
-  - {fileID: -1188797134091147522}
+  - {fileID: -3534996726626027069}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -346,11 +454,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: FMOD Source/Build/Desktop/Master.strings.bank
   SubDir: 
-  lastModified: 637282533629182444
+  lastModified: 637282550614259685
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 914
+    Value: 1128
   Exists: 1
 --- !u!114 &8434608771326160089
 MonoBehaviour:
@@ -367,7 +475,7 @@ MonoBehaviour:
   Path: event:/Lobby Sounds/UI/Leaving Room
   guid: 2be8cceada98c24ab4c7402890e591e6
   Banks:
-  - {fileID: -1188797134091147522}
+  - {fileID: -3534996726626027069}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1

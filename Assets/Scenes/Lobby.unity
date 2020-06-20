@@ -336,6 +336,50 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 25, y: 0, z: 25}
   m_Center: {x: -0.00000047683716, y: -0.000000059604645, z: 0.0000019669533}
+--- !u!1 &230280817
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 230280819}
+  - component: {fileID: 230280818}
+  m_Layer: 0
+  m_Name: FMODEventManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &230280818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230280817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa14d6d311c29d541bafd9efb8fc86d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonDownEvent: event:/Lobby Sounds/UI/Button
+--- !u!4 &230280819
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230280817}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.9816378, y: 2.4355288, z: -5.1881247}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &446674533 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3623189699029564489, guid: 1d1849504574aea44ac3516c8961ee6c,
@@ -539,7 +583,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1008417969 stripped
 Transform:
@@ -645,7 +689,7 @@ Transform:
   - {fileID: 179321305}
   - {fileID: 1323723126}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1590110826
 GameObject:
@@ -675,7 +719,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1948079914
 GameObject:
@@ -730,7 +774,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1948079917
 MonoBehaviour:
@@ -747,7 +791,7 @@ MonoBehaviour:
   CollisionTag: 
   Event: event:/Lobby Sounds/Ambience/Lobby Ambience
   PlayEvent: 11
-  StopEvent: 0
+  StopEvent: 2
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
@@ -802,7 +846,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2118308564
 GameObject:
@@ -1204,7 +1248,7 @@ PrefabInstance:
     - target: {fileID: 7239129613789280517, guid: 972a27963b988fc4caee5565a53c37d3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7239129613789280517, guid: 972a27963b988fc4caee5565a53c37d3,
         type: 3}
