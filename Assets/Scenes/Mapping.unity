@@ -221,6 +221,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 100
   playerBody: {fileID: 2012440597}
+--- !u!114 &385399089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385399086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ListenerNumber: -1
 --- !u!1001 &484174620
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -479,6 +492,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5444596107874531195, guid: 6793c5998edc9c64fa386de2ecd6bf58, type: 3}
     - {fileID: 5444596108648555924, guid: 6793c5998edc9c64fa386de2ecd6bf58, type: 3}
+    - {fileID: 5444596108648555920, guid: 6793c5998edc9c64fa386de2ecd6bf58, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6793c5998edc9c64fa386de2ecd6bf58, type: 3}
 --- !u!1 &1069213153
 GameObject:
@@ -901,7 +915,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1962825154}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1962825156
 Camera:
   m_ObjectHideFlags: 0
