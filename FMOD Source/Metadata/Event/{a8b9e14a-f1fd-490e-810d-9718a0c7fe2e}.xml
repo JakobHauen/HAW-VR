@@ -5,7 +5,7 @@
 			<value>Videomapping - Change Room Style</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>0</value>
 		</property>
 		<relationship name="folder">
 			<destination>{5dac06db-779c-484e-aad0-f32883fdcba1}</destination>
@@ -112,9 +112,8 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{543960ae-d652-4df8-9b9f-ddac8a7e865f}">
 		<relationship name="effects">
-			<destination>{e98e5a65-30b2-4765-a35b-f554d02bdebe}</destination>
-			<destination>{8147bfa0-b654-4070-8190-6286747e6f8e}</destination>
 			<destination>{c4295ce6-a72f-49ec-ab95-665c30b87af5}</destination>
+			<destination>{e98e5a65-30b2-4765-a35b-f554d02bdebe}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{401751e8-054e-4bb7-ac52-794c2eac189a}" />
@@ -125,16 +124,12 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{2d1085c2-2db7-4908-a793-f8b568614adc}" />
-	<object class="MixerBusFader" id="{e98e5a65-30b2-4765-a35b-f554d02bdebe}" />
-	<object class="SpatialiserEffect" id="{8147bfa0-b654-4070-8190-6286747e6f8e}" />
 	<object class="PluginEffect" id="{c4295ce6-a72f-49ec-ab95-665c30b87af5}">
-		<property name="bypass">
-			<value>true</value>
-		</property>
 		<relationship name="plugin">
 			<destination>{34144927-903f-4276-8375-1773dd5df808}</destination>
 		</relationship>
 	</object>
+	<object class="MixerBusFader" id="{e98e5a65-30b2-4765-a35b-f554d02bdebe}" />
 	<object class="MixerBusFader" id="{94bf7c20-ae99-4231-a7b2-52374f6ed5c4}" />
 	<object class="Plugin" id="{34144927-903f-4276-8375-1773dd5df808}">
 		<property name="identifier">
@@ -251,7 +246,6 @@
 		<property name="name">
 			<value>3D Attributes</value>
 		</property>
-		<property name="value" />
 		<property name="dataType">
 			<value>-2</value>
 		</property>
@@ -287,7 +281,6 @@
 		<property name="name">
 			<value>Overall Gain</value>
 		</property>
-		<property name="value" />
 		<property name="dataType">
 			<value>-1</value>
 		</property>
