@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Mapping
 {
-    public class MouseLook : MonoBehaviour
+    public class MappingMouseLook : MonoBehaviour
     {
         public float mouseSensitivity = 100f;
 
