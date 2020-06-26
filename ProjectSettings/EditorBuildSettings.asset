@@ -11,9 +11,24 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/MultiplayerTest/DemoScene.unity
     guid: dac87198a80d2d048aba49aebbf65435
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Lobby.unity
     guid: 7658e6e6ea523bb42b25fc54a54bb649
+  - enabled: 0
+    path: Assets/KonferenzRaum/SzenenUNfertig/PlanB-Konf.unity
+    guid: de4840152edf0cd48b8a06649fe119dc
+  - enabled: 0
+    path: Assets/KonferenzRaum/SzenenUNfertig/PlanB-Heller.unity
+    guid: eb309ad958f3fb14ebf3c627386940ce
+  - enabled: 0
+    path: Assets/KonferenzRaum/SzenenUNfertig/PlanB-HellerAnders.unity
+    guid: 46cc26f587c7b154989d6b049463d02d
+  - enabled: 0
+    path: Assets/KonferenzRaum/SzenenUNfertig/PlanA-Konf.unity
+    guid: 39ac20d2d5fcf4747b9800f902d3fde0
+  - enabled: 1
+    path: Assets/KonferenzRaum/SzenenUNfertig/VonPlanBzuA.unity
+    guid: 394ceec1f40d54b4c981caf90fd54635
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 582b6227d8c197f48bc7bc047173c76d,
       type: 2}

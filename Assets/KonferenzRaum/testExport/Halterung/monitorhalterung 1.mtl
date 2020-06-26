@@ -1,0 +1,16 @@
+# Rhino
+newmtl polykristallines-photovoltaik-solarmodul-24v-275w- (1)
+Ka 0.0000 0.0000 0.0000
+Kd 1.0000 1.0000 1.0000
+Ks 1.0000 1.0000 1.0000
+Tf 0.0000 0.0000 0.0000
+d 1.0000
+Ns 0.0000
+map_Kd polykristallines-photovoltaik-solarmodul-24v-275w-.jpg
+newmtl Glas
+Ka 0.0000 0.0000 0.0000
+Kd 0.0000 0.0000 0.0000
+Ks 1.0000 1.0000 1.0000
+Tf 0.0000 0.0000 0.0000
+d 0.0000
+Ns 255.0000
